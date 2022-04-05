@@ -83,12 +83,20 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter (Collider other)
-	{
-		if (other.gameObject.CompareTag ("armadilha")) {
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "armadilha")
 			StartCoroutine(DanoContinuo());
-		}
-		else 
+	}
+
+    private void OnCollisionExit(Collision collision)
+    {
+		if (collision.gameObject.tag == "armadilha")
+			StopAllCoroutines();
+    }
+
+    void OnTriggerEnter (Collider other)
+	{
 		{
 			if (other.gameObject.CompareTag ("esmaga")) {
 				dano = 30;
@@ -103,12 +111,6 @@ public class PlayerController : MonoBehaviour {
 		bVida.fillAmount = vida / 100f;
 		bVida.color = Color.Lerp (Color.red, Color.green, bVida.fillAmount);
 	}
-
-    private void OnTriggerExit(Collider other)
-    {
-		if (other.gameObject.CompareTag("armadilha"))
-			StopAllCoroutines();
-    }
 
     void TrocaCena(string fase)
 	{
@@ -133,9 +135,9 @@ public class PlayerController : MonoBehaviour {
     {
         while (true)
         {
-			yield return new WaitForSeconds(2f);
 			dano = 10;
 			vida -= dano;
+			yield return new WaitForSeconds(2f);
 		}
     }
 }
