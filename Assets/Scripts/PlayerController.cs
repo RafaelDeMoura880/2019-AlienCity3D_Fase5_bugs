@@ -86,9 +86,7 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerEnter (Collider other)
 	{
 		if (other.gameObject.CompareTag ("armadilha")) {
-			dano = 10;
-			vida -= dano;
-
+			StartCoroutine(DanoContinuo());
 		}
 		else 
 		{
@@ -106,7 +104,13 @@ public class PlayerController : MonoBehaviour {
 		bVida.color = Color.Lerp (Color.red, Color.green, bVida.fillAmount);
 	}
 
-	void TrocaCena(string fase)
+    private void OnTriggerExit(Collider other)
+    {
+		if (other.gameObject.CompareTag("armadilha"))
+			StopAllCoroutines();
+    }
+
+    void TrocaCena(string fase)
 	{
 		SceneManager.LoadScene(fase);
 	}
@@ -125,5 +129,13 @@ public class PlayerController : MonoBehaviour {
 		numTiros += municao;
 	}
 
-
+	IEnumerator DanoContinuo()
+    {
+        while (true)
+        {
+			yield return new WaitForSeconds(2f);
+			dano = 10;
+			vida -= dano;
+		}
+    }
 }
