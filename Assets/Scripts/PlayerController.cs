@@ -83,21 +83,12 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.tag == "armadilha")
-			StartCoroutine(DanoContinuo());
-	}
-
-    private void OnCollisionExit(Collision collision)
-    {
-		if (collision.gameObject.tag == "armadilha")
-			StopAllCoroutines();
-    }
-
     void OnTriggerEnter (Collider other)
 	{
 		{
+			if (other.gameObject.tag == "armadilha")
+				StartCoroutine(DanoContinuo(10));
+
 			if (other.gameObject.CompareTag ("esmaga")) {
 				dano = 30;
 				vida -= dano;
@@ -112,13 +103,18 @@ public class PlayerController : MonoBehaviour {
 		bVida.color = Color.Lerp (Color.red, Color.green, bVida.fillAmount);
 	}
 
+    private void OnTriggerExit(Collider other)
+    {
+		if (other.gameObject.tag == "armadilha")
+			StopAllCoroutines();
+	}
+
     void TrocaCena(string fase)
 	{
 		SceneManager.LoadScene(fase);
 	}
 
 	void Fire()
-
 	{
 		var bullet = (GameObject)Instantiate(tiro,posTiro.transform.position,posTiro.transform.rotation);
 		bullet.GetComponent<Rigidbody> ().velocity = bullet.transform.forward * 10;
@@ -131,11 +127,11 @@ public class PlayerController : MonoBehaviour {
 		numTiros += municao;
 	}
 
-	IEnumerator DanoContinuo()
+	IEnumerator DanoContinuo(int danoAplicado)
     {
         while (true)
         {
-			dano = 10;
+			dano = danoAplicado;
 			vida -= dano;
 			yield return new WaitForSeconds(2f);
 		}
