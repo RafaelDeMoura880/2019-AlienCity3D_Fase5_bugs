@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour {
 			}
 			else
 			{
-				if (Input.GetKeyDown (KeyCode.LeftControl) && numTiros>0) {
+				if (Input.GetKeyDown (KeyCode.Mouse0) && numTiros>0) {
 					Fire (); 
 
 				} else {
